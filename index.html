@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OSS · Fighter Operating System</title>
+<meta name="description" content="OSS is the training companion for fighters. Log every class, sparring round and roll, and see how you're really improving. MMA, BJJ, Muay Thai, Boxing.">
+<meta name="theme-color" content="#0B0B0E">
+<meta property="og:title" content="OSS · Fighter Operating System">
+<meta property="og:description" content="Log every round. See yourself improve. The training companion for MMA, BJJ, Muay Thai and Boxing.">
+<meta property="og:image" content="assets/img/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon-48.png" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="video" href="assets/v/promo_en_916.mp4">
+<style>
+:root{
+  --red:#E30613; --red-hi:#FF2D3A; --red-glow:rgba(227,6,19,.55);
+  --bg:#0B0B0E; --bg-2:#121216; --ink:#F5F5F7; --ink-2:#A1A1A6; --ink-3:#6E6E73;
+  --line:rgba(255,255,255,.10);
+  --light:#F5F5F7; --card:#FFFFFF; --ink-d:#1D1D1F; --ink-d2:#6E6E73;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",system-ui,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --gut:clamp(16px,4vw,40px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.47;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+.red{color:var(--red-hi)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+h1,h2,h3{letter-spacing:-.035em;line-height:1.04;font-weight:800}
+.h-xl{font-size:clamp(44px,6vw,82px)}
+.h-l{font-size:clamp(36px,5.6vw,72px)}
+.h-m{font-size:clamp(28px,3.6vw,44px)}
+.lede{font-size:clamp(18px,1.6vw,21px);color:var(--ink-2);line-height:1.45;max-width:36em}
+
+/* ---------- liquid glass ---------- */
+.glass{
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  -webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 40px rgba(0,0,0,.35);
+}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:50;width:min(1100px,calc(100% - 24px));
+  display:flex;align-items:center;gap:10px;padding:8px 8px 8px 18px;border-radius:999px;transition:background .4s var(--ease)}
+.nav .logo{height:20px;width:auto}
+.nav .links{display:flex;gap:4px;margin-left:auto}
+.nav .links a{font-size:14px;color:var(--ink-2);padding:8px 12px;border-radius:999px;transition:color .2s,background .2s}
+.nav .links a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.lang{display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px;font-weight:700}
+.lang button{padding:6px 10px;border-radius:999px;color:var(--ink-2);transition:all .25s var(--ease)}
+.lang button[aria-pressed=true]{background:#fff;color:#000}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:999px;font-weight:600;font-size:15px;white-space:nowrap;transition:transform .25s var(--ease),box-shadow .25s,background .25s}
+.btn:active{transform:scale(.97)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 8px 30px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-red:hover{background:var(--red-hi);transform:translateY(-1px)}
+.btn-ghost{color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.16)}
+.btn-sm{height:36px;padding:0 16px;font-size:14px}
+@media(max-width:820px){.nav .links{display:none}.nav .lang{margin-left:auto}}
+
+
+section[id]{scroll-margin-top:64px}
+/* ---------- mobile menu ---------- */
+.burger{display:none;width:40px;height:40px;border-radius:50%;position:relative;flex:0 0 auto;background:rgba(255,255,255,.08)}
+.burger i{position:absolute;left:12px;right:12px;height:2px;border-radius:2px;background:#fff;transition:transform .45s var(--ease),top .45s var(--ease)}
+.burger i:first-child{top:15px}.burger i:last-child{top:23px}
+.menu-open .burger i:first-child{top:19px;transform:rotate(45deg)}
+.menu-open .burger i:last-child{top:19px;transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:0;z-index:45;pointer-events:none;background:rgba(5,5,8,0);transition:background .45s var(--ease)}
+.menu-open .mmenu{pointer-events:auto;background:rgba(5,5,8,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.mm-panel{position:absolute;top:66px;left:12px;right:12px;border-radius:28px;padding:10px;display:flex;flex-direction:column;opacity:0;transform:translateY(-12px) scale(.97);transform-origin:top center;transition:opacity .4s var(--ease),transform .5s var(--ease);background:linear-gradient(180deg,rgba(40,40,46,.86),rgba(22,22,26,.9))}
+.menu-open .mm-panel{opacity:1;transform:none}
+.mm-panel>a:not(.btn){display:flex;justify-content:space-between;align-items:center;padding:15px 16px;border-radius:16px;font-size:20px;font-weight:700;letter-spacing:-.02em;opacity:0;transform:translateY(8px);transition:opacity .4s var(--ease),transform .4s var(--ease),background .2s}
+.mm-panel>a:not(.btn):active,.mm-panel>a:not(.btn):hover{background:rgba(255,255,255,.07)}
+.mm-panel em{font-style:normal;font-size:12px;font-weight:700;color:var(--red-hi);letter-spacing:.1em}
+.menu-open .mm-panel>a{opacity:1;transform:none}
+.mm-panel .btn{margin:8px 6px 4px;height:50px}
+.mm-soc{display:flex;justify-content:center;gap:22px;padding:12px 0 6px;font-size:14px;color:var(--ink-2)}
+@media(max-width:820px){.burger{display:block}}
+@media(max-width:420px){.nav-cta{display:none}.nav{padding-left:16px}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:110px 0 70px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;z-index:-1;
+  background:radial-gradient(60% 50% at 70% 40%,rgba(227,6,19,.38),transparent 70%),radial-gradient(40% 35% at 15% 85%,rgba(227,6,19,.16),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,360px);gap:64px;align-items:center}
+.hero .tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 8px;border-radius:999px;font-size:13px;font-weight:600;color:#fff;margin-bottom:26px}
+.hero .tag i{width:8px;height:8px;border-radius:50%;background:var(--red-hi);box-shadow:0 0 0 4px rgba(255,45,58,.25);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(255,45,58,0)}}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:block;transform:translateY(105%);animation:rise 1s var(--ease) forwards}
+.hero h1 .line:nth-child(2) span{animation-delay:.12s}
+@keyframes rise{to{transform:none}}
+.hero .lede{margin:26px 0 34px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stores{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+.store{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border-radius:14px;font-size:11px;line-height:1.15;color:var(--ink-2)}
+.store b{display:block;font-size:15px;color:#fff;font-weight:600;letter-spacing:-.01em}
+.store svg{width:22px;height:22px;fill:#fff}
+.reel{position:relative;justify-self:center;width:min(360px,100%);aspect-ratio:9/16;border-radius:34px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.14),0 40px 120px rgba(227,6,19,.35),0 20px 60px rgba(0,0,0,.6);
+  transform:perspective(1200px) rotateY(-8deg) rotateX(3deg);transition:transform .8s var(--ease);background:#0B0B0D}
+.reel:hover{transform:perspective(1200px) rotateY(0) rotateX(0)}
+.reel video{width:100%;height:100%;object-fit:cover}
+.sound{position:absolute;right:12px;bottom:12px;display:flex;align-items:center;gap:6px;height:36px;padding:0 14px 0 12px;border-radius:999px;font-size:13px;font-weight:600;z-index:2}
+.sound svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--ink-3);letter-spacing:.14em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-hint::after{content:"";width:1px;height:28px;background:linear-gradient(var(--ink-3),transparent);animation:drip 2s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media(max-width:900px){
+  .hero{padding-top:96px;text-align:center}
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .hero .lede{margin-left:auto;margin-right:auto}
+  .cta-row,.stores{justify-content:center}
+  .reel{width:min(300px,82vw);transform:none}
+  .scroll-hint{display:none}
+}
+
+/* ---------- marquee ---------- */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:18px 0;background:var(--bg-2)}
+.marquee .track{display:flex;gap:48px;width:max-content;animation:slide 32s linear infinite}
+.marquee span{font-size:clamp(18px,2vw,22px);font-weight:700;letter-spacing:-.02em;color:var(--ink-3);display:flex;align-items:center;gap:48px;white-space:nowrap}
+.marquee span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec{padding:clamp(90px,12vw,160px) 0}
+.center{text-align:center}
+.center .lede{margin:22px auto 0}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+/* cinema */
+.cinema{margin-top:56px;position:relative;border-radius:28px;overflow:hidden;background:#0B0B0D;
+  box-shadow:0 0 0 1px var(--line),0 50px 140px rgba(227,6,19,.22);aspect-ratio:16/9;transform:scale(.92);transition:transform 1.2s var(--ease)}
+.cinema.in{transform:none}
+.cinema video{width:100%;height:100%;object-fit:cover}
+@media(max-width:760px){.cinema{aspect-ratio:9/16;max-width:440px;margin-inline:auto;border-radius:26px}}
+
+/* manifesto */
+.manifesto p{font-size:clamp(30px,4.6vw,60px);font-weight:800;letter-spacing:-.035em;line-height:1.1;max-width:20ch;margin:0 auto;text-align:center}
+.manifesto .w{color:rgba(255,255,255,.16);transition:color .35s}
+.manifesto .w.on{color:#fff}
+.manifesto .w.on.r{color:var(--red-hi)}
+
+/* ---------- light bento ---------- */
+.light{background:var(--light);color:var(--ink-d)}
+.light .eyebrow{color:var(--ink-d2)}
+.light .lede{color:var(--ink-d2)}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
+.card{background:var(--card);border-radius:28px;padding:30px 28px 0;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 40px rgba(0,0,0,.06);transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.card:hover{transform:translateY(-4px);box-shadow:0 1px 2px rgba(0,0,0,.04),0 24px 60px rgba(0,0,0,.10)}
+.card h3{font-size:24px;letter-spacing:-.025em;line-height:1.12}
+.card p{color:var(--ink-d2);font-size:15.5px;margin-top:8px}
+.card .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.card .stage{margin-top:auto;padding-top:26px;display:flex;justify-content:center}
+.phone{width:210px;aspect-ratio:390/844;border-radius:34px 34px 0 0;padding:8px 8px 0;background:#111;position:relative;
+  box-shadow:0 0 0 1px #2a2a2c,0 20px 50px rgba(0,0,0,.22);transform:translateY(14px);transition:transform .6s var(--ease)}
+.card:hover .phone{transform:translateY(0)}
+.phone video{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:27px 27px 0 0;background:#0B0B0D}
+.phone::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:62px;height:18px;border-radius:12px;background:#000;z-index:2}
+.phone-crop{height:340px;overflow:hidden;display:flex;justify-content:center;align-self:end}
+.card.wide{grid-column:span 2}
+.phone.full{width:min(250px,78%);border-radius:46px;padding:9px;transform:none;box-shadow:0 0 0 1px #2a2a2c,inset 0 0 0 2px #1c1c1e,0 30px 60px rgba(0,0,0,.28)}
+.phone.full::before{display:none}
+.phone.full video{border-radius:38px;object-position:top}
+.card:hover .phone.full{transform:translateY(-4px)}
+.card .stage{padding:26px 0 30px}
+.card.wide .stage{padding:30px 0}
+.hear{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px 0 12px;border-radius:999px;margin-top:16px;font-size:14px;font-weight:600;color:#fff;align-self:flex-start}
+.hear svg{width:14px;height:14px;fill:#fff}
+.hear.playing svg{animation:pulse 1s infinite}
+.tap{margin:26px 0 30px;padding:18px;border-radius:22px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.tap-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.tap-logo{font-weight:900;letter-spacing:.12em;font-size:13px}
+.tap-ok{font-size:12px;font-weight:700;color:#22C55E;background:rgba(34,197,94,.14);padding:4px 10px;border-radius:999px}
+.rec{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.rec div{background:rgba(255,255,255,.06);border-radius:14px;padding:12px 6px;text-align:center}
+.rec b{display:block;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.rec div:first-child b{color:var(--red-hi)}
+.rec small{font-size:11px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.08em}
+.tap-row{display:grid;grid-template-columns:110px 1fr 22px;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);padding:6px 2px}
+.tap-row i{height:6px;border-radius:6px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+.tap-row i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--red);border-radius:6px}
+.tap-row b{color:#fff;text-align:right}
+.tap-link{margin-top:10px;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.dark{background:#0B0B0D;color:#fff}
+.card.dark p{color:var(--ink-2)}
+.card.red{background:linear-gradient(160deg,#FF2D3A,#B0000E);color:#fff}
+.card.red p,.card.red .k{color:rgba(255,255,255,.82)}
+.timer{font-size:clamp(64px,8vw,104px);font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;padding:28px 0 6px;text-align:center}
+.timer-sub{display:flex;justify-content:center;gap:8px;padding-bottom:30px}
+.chip{font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.18)}
+.chat{display:flex;flex-direction:column;gap:10px;padding:26px 0 30px}
+.bub{max-width:86%;padding:11px 15px;border-radius:20px;font-size:14.5px;line-height:1.35}
+.bub.me{align-self:flex-end;background:var(--red);color:#fff;border-bottom-right-radius:6px}
+.bub.ai{background:rgba(255,255,255,.08);color:#E5E5EA;border-bottom-left-radius:6px}
+.big-num{font-size:clamp(72px,9vw,120px);font-weight:900;letter-spacing:-.05em;line-height:1;padding:30px 0 34px;background:linear-gradient(180deg,#1D1D1F,#6E6E73);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wide-inner{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;height:100%}
+.wide-inner .txt{padding-bottom:30px}
+@media(max-width:980px){.bento{grid-template-columns:1fr 1fr}.card.wide{grid-column:span 2}}
+@media(max-width:980px){.card[style*="1/-1"]{grid-column:span 2!important}}
+@media(max-width:640px){.card[style*="1/-1"]{grid-column:auto!important}.bento{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:48px calc(-1*var(--gut)) 0;padding:6px var(--gut) 26px;scrollbar-width:none}.bento::-webkit-scrollbar{display:none}.bento .card{flex:0 0 86%;scroll-snap-align:center}.bento .card:hover{transform:none}.swipe{display:block!important}.card.wide{grid-column:auto}.wide-inner{grid-template-columns:1fr}.wide-inner .txt{padding-bottom:0}.card{padding:26px 22px 0}.phone.full{width:min(260px,74%)}.card.wide .stage{padding:6px 0 28px}}
+
+/* ---------- gallery ---------- */
+.gallery{margin-top:56px;display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px var(--gut) 30px;scrollbar-width:none;cursor:grab}
+.gallery::-webkit-scrollbar{display:none}
+.gallery img{flex:0 0 auto;height:min(560px,70svh);width:auto;aspect-ratio:1290/2796;border-radius:24px;scroll-snap-align:center;object-fit:cover;
+  box-shadow:0 0 0 1px var(--line),0 20px 60px rgba(0,0,0,.5);transition:transform .5s var(--ease)}
+.gallery img:hover{transform:translateY(-6px)}
+.gal-ctrl{display:flex;justify-content:center;gap:10px}
+.gal-ctrl button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center}
+.gal-ctrl svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- theater ---------- */
+.seg{display:inline-flex;padding:4px;border-radius:999px;margin-top:34px;gap:2px;flex-wrap:wrap;justify-content:center}
+.seg button{padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;color:var(--ink-2);transition:all .3s var(--ease)}
+.seg button[aria-selected=true]{background:#fff;color:#000}
+.theater{margin:36px auto 0;position:relative;border-radius:28px;overflow:hidden;background:#0B0B0D;aspect-ratio:16/9;box-shadow:0 0 0 1px var(--line),0 40px 120px rgba(0,0,0,.6)}
+.theater video{width:100%;height:100%;object-fit:contain;background:#000}
+.play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.55));transition:opacity .4s}
+.play.hide{opacity:0;pointer-events:none}
+.play .pb{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;transition:transform .3s var(--ease)}
+.play:hover .pb{transform:scale(1.08)}
+.play svg{width:28px;height:28px;fill:#fff;margin-left:4px}
+.play .cap{position:absolute;left:24px;bottom:22px;text-align:left;font-weight:700;font-size:18px}
+.play .cap small{display:block;font-weight:500;color:var(--ink-2);font-size:13px}
+@media(max-width:760px){.theater{aspect-ratio:9/16;max-width:440px;border-radius:26px}
+  .seg{flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{padding:9px 14px;font-size:13px;white-space:nowrap;flex:0 0 auto}}
+
+/* ---------- waitlist ---------- */
+.join{overflow:hidden;isolation:isolate}
+.join::before{content:"";position:absolute;inset:auto -20% -40% -20%;height:90%;z-index:-1;background:radial-gradient(50% 60% at 50% 100%,rgba(227,6,19,.5),transparent 70%)}
+.join .lockup{height:clamp(48px,7vw,80px);margin:0 auto 34px;width:auto}
+.form{max-width:560px;margin:40px auto 0;padding:10px;border-radius:26px}
+.field{display:flex;gap:8px}
+.field input{flex:1;min-width:0;height:54px;padding:0 20px;border-radius:18px;border:0;background:rgba(0,0,0,.45);color:#fff;font:inherit;font-size:16px;outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:box-shadow .2s}
+.field input:focus{box-shadow:inset 0 0 0 2px var(--red-hi)}
+.field .btn{height:54px;border-radius:18px;padding:0 24px}
+.plat{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.plat label{position:relative}
+.plat input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.plat span{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--ink-2);background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:all .25s var(--ease)}
+.plat input:checked+span{color:#fff;background:rgba(227,6,19,.28);box-shadow:inset 0 0 0 1px rgba(255,45,58,.7)}
+.plat input:focus-visible+span{outline:2px solid #fff;outline-offset:2px}
+.fine{font-size:13px;color:var(--ink-3);margin-top:14px}
+.ok{display:none;padding:26px 10px 18px}
+.ok .check{width:56px;height:56px;border-radius:50%;background:var(--red);display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 10px 30px var(--red-glow)}
+.ok svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ok h3{font-size:24px}
+.form.done .ok{display:block}
+.form.done .fields{display:none}
+.err{color:#FF6B74;font-size:14px;margin-top:10px;min-height:1px}
+@media(max-width:520px){.field{flex-direction:column}.field .btn{width:100%}}
+
+/* ---------- faq ---------- */
+.faq{max-width:760px;margin:48px auto 0}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 4px;font-size:clamp(17px,1.6vw,20px);font-weight:600;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:0 0 auto;width:12px;height:12px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(45deg) translateY(-3px);transition:transform .3s var(--ease)}
+.faq details[open] summary::after{transform:rotate(-135deg)}
+.faq p{color:var(--ink-2);padding:0 4px 24px;max-width:60ch}
+
+
+/* ---------- chapters (scroll stories) ---------- */
+.chap{padding:clamp(90px,11vw,150px) 0 clamp(40px,6vw,80px);position:relative;overflow:clip;isolation:isolate;--acc:#FF2D3A;--acc-rgb:227,6,19}
+.chap::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(45% 35% at 75% 45%,rgba(var(--acc-rgb),.20),transparent 70%),radial-gradient(35% 30% at 10% 90%,rgba(var(--acc-rgb),.08),transparent 70%)}
+.acc-blue{--acc:#4C8DFF;--acc-rgb:47,123,255;background:linear-gradient(180deg,#0B0B0E,#07101F 18%,#07101F 82%,#0B0B0E)}
+.acc-light{background:var(--light);color:var(--ink-d)}
+.acc-light::before{background:radial-gradient(45% 35% at 75% 45%,rgba(227,6,19,.07),transparent 70%)}
+.chap-head{text-align:center;max-width:860px;margin:0 auto}
+.chap-head .lede{margin:22px auto 0}
+.chap .acc{color:var(--acc)}
+.acc-light .eyebrow,.acc-light .lede,.acc-light .step p{color:var(--ink-d2)}
+.chap-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;margin-top:20px;position:relative}
+.chap-steps{position:relative;padding-left:30px}
+.rail{position:absolute;left:0;top:18vh;bottom:18vh;width:2px;background:rgba(255,255,255,.08);border-radius:2px}
+.acc-light .rail{background:rgba(0,0,0,.08)}
+.rail i{display:block;width:100%;height:var(--prog,0%);background:var(--acc);box-shadow:0 0 14px var(--acc);border-radius:2px;transition:height .6s var(--ease)}
+.step{min-height:74vh;display:flex;align-items:center;gap:18px;opacity:.22;transform:translateY(10px) scale(.985);transform-origin:left center;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.step.on{opacity:1;transform:none}
+.step .num{font-weight:800;font-size:13px;color:var(--acc);letter-spacing:.12em;align-self:flex-start;padding-top:12px;font-variant-numeric:tabular-nums}
+.step h3{font-size:clamp(28px,2.8vw,40px);letter-spacing:-.035em;line-height:1.06}
+.step p{color:var(--ink-2);font-size:clamp(17px,1.4vw,19px);margin-top:12px;max-width:28em}
+.callout{display:inline-flex;align-items:center;gap:8px;margin-top:18px;height:38px;padding:0 16px;border-radius:999px;font-weight:700;font-size:14px;color:#fff}
+.callout::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(var(--acc-rgb),.25);animation:pulse 2s infinite}
+.chap-stage .stick{position:sticky;top:calc(50vh - 340px);height:680px;display:flex;justify-content:center;align-items:center}
+.phone.xl{width:314px;max-width:none;aspect-ratio:390/844;overflow:hidden;box-shadow:0 0 0 1px #2a2a2c,inset 0 0 0 2px #1c1c1e,0 40px 120px rgba(var(--acc-rgb),.28),0 30px 60px rgba(0,0,0,.45)}
+@media(min-width:861px){.chap .phone.xl{animation:float 7s ease-in-out infinite}}
+@keyframes float{50%{transform:translateY(-8px)}}
+.acc-light .phone.xl{box-shadow:0 0 0 1px #d2d2d7,0 40px 100px rgba(0,0,0,.18)}
+.phone .m{position:absolute;inset:9px;width:calc(100% - 18px);height:calc(100% - 18px);object-fit:cover;object-position:top;border-radius:38px;opacity:0;transform:scale(1.06) translateY(14px);filter:blur(10px);transition:opacity .7s var(--ease),transform 1s var(--ease),filter .7s var(--ease);background:#16161A}
+.phone .m.on{opacity:1;transform:none;filter:none}
+.m.iq{display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 50% at 50% 40%,rgba(227,6,19,.25),#141418)}
+.iq-card{width:86%;padding:22px 18px 20px;border-radius:28px;text-align:center;position:relative}
+.iq-k{font-size:10px;letter-spacing:.16em;color:var(--ink-2);font-weight:700}
+.iq-t{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.iq-card svg{width:78%;margin:14px auto 0;display:block;transform:rotate(135deg)}
+.iq-card circle{fill:none;stroke-width:13;stroke-linecap:round}
+.iq-bg{stroke:rgba(255,255,255,.08);stroke-dasharray:367.6 490}
+.iq-fg{stroke:#E30613;stroke-dasharray:0 490;filter:drop-shadow(0 0 8px rgba(227,6,19,.7));transition:stroke-dasharray 1.6s var(--ease)}
+.iq-n{position:absolute;left:0;right:0;top:50%;font-size:58px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;transform:translateY(-14%)}
+.iq-tabs{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.iq-tabs span{font-size:11px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:999px}
+.iq-tabs span.on{background:rgba(255,255,255,.1);color:#fff}
+.tech-strip{margin:36px calc(-1*var(--gut)) 0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.tech-strip .tt{display:flex;gap:12px;width:max-content;animation:slide 40s linear infinite}
+.tech-strip:hover .tt{animation-play-state:paused}
+.tchip{display:flex;flex-direction:column;gap:6px;min-width:178px;padding:14px 16px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);text-align:left}
+.tchip b{font-size:16px;letter-spacing:-.01em}
+.tchip small{font-size:12px;color:var(--ink-2)}
+.tchip i{height:4px;border-radius:4px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;margin-top:4px}
+.tchip i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--c,#8B5CF6);border-radius:4px}
+.tchip .st{align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--ink-2)}
+.tchip .st.rv{background:rgba(245,158,11,.16);color:#F5B301}.tchip .st.ms{background:rgba(139,92,246,.18);color:#B79BFF}.tchip .st.ip{background:rgba(59,130,246,.16);color:#7CB0FF}
+
+.m.cyc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .7s var(--ease);border-radius:inherit}
+.m.cyc img.on{opacity:1}
+.cyc-tabs{display:inline-flex;gap:4px;margin-top:18px;padding:4px;border-radius:999px;background:rgba(0,0,0,.05)}
+.cyc-tabs span{font-size:13px;font-weight:700;padding:7px 14px;border-radius:999px;color:var(--ink-d2);transition:all .4s var(--ease)}
+.cyc-tabs span.on{background:#fff;color:var(--ink-d);box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.acc-light .callout,.acc-light .hear{color:var(--ink-d);background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 6px 20px rgba(0,0,0,.08);-webkit-backdrop-filter:none;backdrop-filter:none}
+.acc-light .hear svg{fill:var(--ink-d)}
+.acc-light .tchip{background:#fff;border-color:rgba(0,0,0,.06);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.acc-light .tchip small{color:var(--ink-d2)}.acc-light .tchip .st{background:rgba(0,0,0,.05);color:var(--ink-d2)}
+.acc-light .tchip i{background:rgba(0,0,0,.07)}
+.acc-light .step h3{color:var(--ink-d)}
+@media(max-width:860px){
+  .chap-grid{grid-template-columns:1fr;gap:0;margin-top:28px}
+  .chap-stage{order:-1;position:sticky;top:64px;z-index:1;height:auto}
+  .chap-stage .stick{position:static;height:auto;padding:6px 0}
+  .phone.xl{width:min(206px,52vw);border-radius:34px;padding:7px}
+  .phone.xl .m{inset:7px;width:calc(100% - 14px);height:calc(100% - 14px);border-radius:28px}
+  .chap-steps{padding-left:0}
+  .rail{display:none}
+  .step{min-height:78vh;align-items:flex-end;padding-bottom:4vh;position:relative;z-index:2;opacity:.0;transform:translateY(24px)}
+  .step.on{opacity:1}
+  .step .num{display:none}
+  .step>div{background:rgba(22,22,26,.78);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px 20px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .acc-light .step>div{background:rgba(255,255,255,.82);border-color:rgba(0,0,0,.06);box-shadow:0 20px 50px rgba(0,0,0,.12)}
+  .step h3{font-size:24px}.step p{font-size:16px;margin-top:6px}
+  .step:first-child{margin-top:-24vh}
+  .step{transition:opacity .5s var(--ease),transform .5s var(--ease)}
+}
+@media (prefers-reduced-motion:reduce){.step{opacity:1;transform:none}.phone .m{transition:none}}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:44px 0 calc(44px + env(safe-area-inset-bottom));color:var(--ink-3);font-size:14px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.foot .logo{height:22px;width:auto}
+.foot nav{display:flex;gap:20px;flex-wrap:wrap}
+.foot a:hover{color:#fff}
+.soc{display:inline-flex;align-items:center;gap:6px}.soc svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.socials{display:flex;gap:10px;justify-content:center;margin-top:22px}.socials a{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:600;color:#fff}
+
+/* mobile sticky CTA */
+.dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;display:none;gap:8px;padding:8px;border-radius:22px;transform:translateY(140%);transition:transform .5s var(--ease)}
+.dock.show{transform:none}
+.dock .btn{flex:1;height:48px}
+.dock{background:linear-gradient(180deg,rgba(28,28,30,.82),rgba(18,18,20,.78))}
+@media(max-width:760px){.dock{display:flex}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}.hero h1 .line span{transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav glass" id="nav">
+  <a href="#top" aria-label="OSS"><img class="logo" src="assets/img/logo_red.png" alt="OSS"></a>
+  <nav class="links">
+    <a href="#train" data-i="nav_train">Train</a>
+    <a href="#vault">Vault</a>
+    <a href="#spar" data-i="nav_stats">Stats</a>
+    <a href="#ai" data-i="nav_ai">AI Coach</a>
+    <a href="#watch" data-i="nav_watch">Watch</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Language">
+    <button data-lang="en" aria-pressed="true">EN</button>
+    <button data-lang="es" aria-pressed="false">ES</button>
+  </div>
+  <a class="btn btn-red btn-sm nav-cta" href="#join" data-i="nav_cta">Join waitlist</a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mmenu"><i></i><i></i></button>
+</header>
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <nav class="mm-panel glass">
+    <a href="#train"><span data-i="nav_train">Train</span><em>01</em></a>
+    <a href="#ai"><span data-i="nav_ai">AI Coach</span><em>02</em></a>
+    <a href="#scout"><span data-i="nav_scout">Scout</span><em>03</em></a>
+    <a href="#vault"><span>Vault</span><em>04</em></a>
+    <a href="#spar"><span data-i="nav_stats">Stats</span><em>05</em></a>
+    <a href="#camp"><span data-i="nav_camp">Fight Camp</span><em>07</em></a>
+    <a href="#watch"><span data-i="nav_watch">Watch</span><em>▶</em></a>
+    <a href="#faq"><span>FAQ</span><em>?</em></a>
+    <a class="btn btn-red" href="#join" data-i="cta_join">Join the waitlist</a>
+    <div class="mm-soc"><a href="https://www.instagram.com/oss.fighterapp/" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@oss.app" target="_blank" rel="noopener">TikTok</a></div>
+  </nav>
+</div>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tag glass"><i></i><span data-i="tag">Coming soon to iPhone &amp; Android</span></div>
+      <h1 class="h-xl">
+        <span class="line"><span data-i="h1a">Log every round.</span></span>
+        <span class="line"><span class="red" data-i="h1b">See yourself improve.</span></span>
+      </h1>
+      <p class="lede" data-i="hero_lede">The training companion for fighters. OSS doesn't teach you to fight. It logs what you already train and shows you, in numbers, how you're getting better.</p>
+      <div class="cta-row">
+        <a class="btn btn-red" href="#join" data-i="cta_join">Join the waitlist</a>
+        <a class="btn btn-ghost glass" href="#watch" data-i="cta_watch">▶ Watch the tour</a>
+      </div>
+      <div class="stores">
+        <div class="store glass"><svg viewBox="0 0 24 24"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.67zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg><div><span data-i="soon">Coming soon</span><b>App Store</b></div></div>
+        <div class="store glass"><svg viewBox="0 0 24 24"><path d="M3.6 2.3c-.2.2-.3.6-.3 1v17.4c0 .4.1.8.3 1l9.7-9.7L3.6 2.3zm10.8 10.8 2.6 2.6-11.5 6.6 8.9-9.2zm0-2.2L5.5 1.7 17 8.3l-2.6 2.6zm3.9 4-2.9-2.9 2.9-2.9 3.3 1.9c.9.5.9 1.4 0 1.9l-3.3 2z"/></svg><div><span data-i="soon">Coming soon</span><b>Google Play</b></div></div>
+      </div>
+    </div>
+    <div class="reel" id="heroReel">
+      <video id="heroVid" data-v="promo" data-o="916" autoplay muted loop playsinline preload="auto" poster="assets/v/promo_en_916.jpg"></video>
+      <button class="sound glass" data-sound="heroVid" aria-label="Sound on"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path class="wave" d="M23 9l-6 6M17 9l6 6"/></svg><span data-i="sound_on">Sound on</span></button>
+    </div>
+  </div>
+  <div class="scroll-hint" data-i="scroll">Scroll</div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<!-- THE QUESTION -->
+<section class="sec" id="question">
+  <div class="wrap center">
+    <p class="eyebrow reveal" data-i="q_eye">The real question</p>
+    <h2 class="h-l reveal d1"><span data-i="q_a">You've been training for years.</span><br><span class="red" data-i="q_b">Are you getting better?</span></h2>
+    <p class="lede reveal d2" data-i="q_lede">Most fighters can't answer that. Every class, every round, every tap blurs into the next. OSS turns your training into something you can actually see.</p>
+    <div class="cinema" id="cin1">
+      <video data-v="mejoraste" data-lazy muted loop playsinline preload="none"></video>
+      <button class="sound glass" data-sound="cin1" aria-label="Sound on"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6"/></svg><span data-i="sound_on">Sound on</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="sec manifesto" style="padding-top:0">
+  <div class="wrap"><p id="mani" data-i="mani">Not a course. Not a coach replacement. A training log built for fighters: what worked, where you got caught, and what to drill next.</p></div>
+</section>
+
+<section class="chap acc-light" id="train">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch1_e"></p><h2 class="h-l reveal d1" data-ih="ch1_h"></h2><p class="lede reveal d2" data-i="ch1_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch1s0_h"></h3><p data-i="ch1s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch1s1_h"></h3><p data-i="ch1s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch1s2_h"></h3><p data-i="ch1s2_p"></p><button class="hear glass" data-hear><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg><span data-i="hear">Hear the announcer</span></button></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch1s3_h"></h3><p data-i="ch1s3_p"></p></div></div><div class="step" data-n="4"><span class="num">05</span><div><h3 data-i="ch1s4_h"></h3><p data-i="ch1s4_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="t_live" alt="" decoding="async"><video class="m" data-app="session" data-lazy muted loop playsinline preload="none"></video><video class="m" data-app="timer" data-lazy muted loop playsinline preload="none"></video><img class="m" data-cap="t_metro" alt="" decoding="async"><img class="m" data-cap="t_disc" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-red" id="ai">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch2_e"></p><h2 class="h-l reveal d1" data-ih="ch2_h"></h2><p class="lede reveal d2" data-i="ch2_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch2s0_h"></h3><p data-i="ch2s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch2s1_h"></h3><p data-i="ch2s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch2s2_h"></h3><p data-i="ch2s2_p"></p></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch2s3_h"></h3><p data-i="ch2s3_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="co_chat" alt="" decoding="async"><img class="m" data-cap="l_upload" alt="" decoding="async"><video class="m" data-app="fightlab" data-lazy muted loop playsinline preload="none"></video><img class="m" data-cap="l_result2" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-blue" id="scout">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch3_e"></p><h2 class="h-l reveal d1" data-ih="ch3_h"></h2><p class="lede reveal d2" data-i="ch3_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch3s0_h"></h3><p data-i="ch3s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch3s1_h"></h3><p data-i="ch3s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch3s2_h"></h3><p data-i="ch3s2_p"></p><div class="callout glass" data-i="ch3s2_c"></div></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch3s3_h"></h3><p data-i="ch3s3_p"></p></div></div><div class="step" data-n="4"><span class="num">05</span><div><h3 data-i="ch3s4_h"></h3><p data-i="ch3s4_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="o_upload" alt="" decoding="async"><video class="m" data-app="opponent" data-lazy muted loop playsinline preload="none"></video><img class="m" data-cap="o_result" alt="" decoding="async"><img class="m" data-cap="o_plan" alt="" decoding="async"><img class="m" data-cap="o_week" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-light" id="vault">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch4_e"></p><h2 class="h-l reveal d1" data-ih="ch4_h"></h2><p class="lede reveal d2" data-i="ch4_p"></p><div class="tech-strip reveal d3" aria-hidden="true"></div></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch4s0_h"></h3><p data-i="ch4s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch4s1_h"></h3><p data-i="ch4s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch4s2_h"></h3><p data-i="ch4s2_p"></p><div class="cyc-tabs"><span class="on" data-i="cyc0">Review</span><span data-i="cyc1">Mastered</span><span data-i="cyc2">In progress</span></div></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch4s3_h"></h3><p data-i="ch4s3_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="v_new" alt="" decoding="async"><img class="m" data-cap="v_tech" alt="" decoding="async"><div class="m cyc"><img data-cap="v_review" alt="" decoding="async" class="on"><img data-cap="v_mastered" alt="" decoding="async"><img data-cap="v_progress" alt="" decoding="async"></div><img class="m" data-cap="v_fund" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-red" id="spar">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch5_e"></p><h2 class="h-l reveal d1" data-ih="ch5_h"></h2><p class="lede reveal d2" data-i="ch5_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch5s0_h"></h3><p data-i="ch5s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch5s1_h"></h3><p data-i="ch5s1_p"></p><div class="callout glass" data-i="ch5s1_c"></div></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch5s2_h"></h3><p data-i="ch5s2_p"></p></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch5s3_h"></h3><p data-i="ch5s3_p"></p></div></div><div class="step" data-n="4"><span class="num">05</span><div><h3 data-i="ch5s4_h"></h3><p data-i="ch5s4_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="t_spar" alt="" decoding="async"><img class="m" data-cap="s_radar" alt="" decoding="async"><img class="m" data-cap="s_profile" alt="" decoding="async"><img class="m" data-cap="s_opps" alt="" decoding="async"><img class="m" data-cap="h_record" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-light" id="submap">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch6_e"></p><h2 class="h-l reveal d1" data-ih="ch6_h"></h2><p class="lede reveal d2" data-i="ch6_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch6s0_h"></h3><p data-i="ch6s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch6s1_h"></h3><p data-i="ch6s1_p"></p><div class="callout glass" data-i="ch6s1_c"></div></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch6s2_h"></h3><p data-i="ch6s2_p"></p></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch6s3_h"></h3><p data-i="ch6s3_p"></p></div></div><div class="step" data-n="4"><span class="num">05</span><div><h3 data-i="ch6s4_h"></h3><p data-i="ch6s4_p"></p></div></div><div class="step" data-n="5"><span class="num">06</span><div><h3 data-i="ch6s5_h"></h3><p data-i="ch6s5_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="s_submap" alt="" decoding="async"><img class="m" data-cap="s_submap_you" alt="" decoding="async"><img class="m" data-cap="s_zone" alt="" decoding="async"><img class="m" data-cap="s_dna" alt="" decoding="async"><img class="m" data-cap="s_heat" alt="" decoding="async"><div class="m iq"><div class="iq-card glass"><div class="iq-k">ROUNDS · 116</div><div class="iq-t">Fight IQ</div><svg viewBox="0 0 200 200"><circle class="iq-bg" cx="100" cy="100" r="78"/><circle class="iq-fg" cx="100" cy="100" r="78"/></svg><div class="iq-n" data-to="70">0</div><div class="iq-tabs"><span class="on">Standup</span><span>Grappling</span><span>MMA</span></div></div></div></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-red" id="camp">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch7_e"></p><h2 class="h-l reveal d1" data-ih="ch7_h"></h2><p class="lede reveal d2" data-i="ch7_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch7s0_h"></h3><p data-i="ch7s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch7s1_h"></h3><p data-i="ch7s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch7s2_h"></h3><p data-i="ch7s2_p"></p></div></div><div class="step" data-n="3"><span class="num">04</span><div><h3 data-i="ch7s3_h"></h3><p data-i="ch7s3_p"></p><div class="callout glass" data-i="ch7s3_c"></div></div></div><div class="step" data-n="4"><span class="num">05</span><div><h3 data-i="ch7s4_h"></h3><p data-i="ch7s4_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><video class="m" data-app="camp" data-lazy muted loop playsinline preload="none"></video><img class="m" data-cap="f_fuel" alt="" decoding="async"><video class="m" data-app="fuel" data-lazy muted loop playsinline preload="none"></video><img class="m" data-cap="h_ready" alt="" decoding="async"><img class="m" data-cap="s_load" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="chap acc-light" id="coachmode">
+  <div class="wrap">
+    <header class="chap-head"><p class="eyebrow reveal" data-i="ch8_e"></p><h2 class="h-l reveal d1" data-ih="ch8_h"></h2><p class="lede reveal d2" data-i="ch8_p"></p></header>
+    <div class="chap-grid">
+      <div class="chap-steps"><div class="rail"><i></i></div><div class="step" data-n="0"><span class="num">01</span><div><h3 data-i="ch8s0_h"></h3><p data-i="ch8s0_p"></p></div></div><div class="step" data-n="1"><span class="num">02</span><div><h3 data-i="ch8s1_h"></h3><p data-i="ch8s1_p"></p></div></div><div class="step" data-n="2"><span class="num">03</span><div><h3 data-i="ch8s2_h"></h3><p data-i="ch8s2_p"></p></div></div></div>
+      <div class="chap-stage"><div class="stick"><div class="phone full xl"><img class="m" data-cap="c_plan" alt="" decoding="async"><img class="m" data-cap="c_att" alt="" decoding="async"><img class="m" data-cap="c_sched" alt="" decoding="async"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section class="sec" id="screens">
+  <div class="wrap center">
+    <p class="eyebrow reveal" data-i="s_eye">Inside the app</p>
+    <h2 class="h-l reveal d1" data-i="s_h">Every screen, made to be used mid-session.</h2>
+  </div>
+  <div class="gallery" id="gal"></div>
+  <div class="gal-ctrl">
+    <button class="glass" data-g="-1" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button class="glass" data-g="1" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec light" id="features">
+  <div class="wrap">
+    <div class="center">
+      <p class="eyebrow reveal" data-i="f_eye">Everything in one place</p>
+      <h2 class="h-l reveal d1"><span data-i="f_a">Built for the mats.</span><br><span data-i="f_b">Designed like it's 2026.</span></h2>
+      <p class="swipe" data-i="swipe" style="display:none;margin-top:14px;font-size:13px;font-weight:600;color:var(--ink-d2)">Swipe →</p>
+      <p class="lede reveal d2" data-i="f_lede">MMA, BJJ, Muay Thai, Boxing and more. Log in seconds, train live, close every session in 20 seconds.</p>
+    </div>
+
+    <div class="bento">
+      <article class="card wide reveal">
+        <div class="wide-inner">
+          <div class="txt">
+            <div class="k" data-i="c1_k">Onboarding</div>
+            <h3 data-i="c1_h">Set up in two minutes. Built around you.</h3>
+            <p data-i="c1_p">Pick your disciplines, level, stance and style. OSS builds your program and shows you everything it can do on the way in.</p>
+          </div>
+          <div class="stage"><div class="phone full"><video data-app="onboarding" data-lazy muted loop playsinline preload="none"></video></div></div>
+        </div>
+      </article>
+      <article class="card  reveal">
+        <div class="k" data-i="c12_k"></div>
+        <h3 data-i="c12_h"></h3>
+        <p data-i="c12_p"></p>
+        <div class="stage"><div class="phone full"><video data-app="mitts" data-lazy muted loop playsinline preload="none"></video></div></div>
+      </article>
+      <article class="card reveal d1">
+        <div class="k" data-i="c8_k">Wrapped</div>
+        <h3 data-i="c8_h">Your month on the mats, Wrapped.</h3>
+        <p data-i="c8_p">Weekly, monthly and yearly recaps made to share.</p>
+        <div class="stage"><div class="phone full"><video data-app="wrapped" data-lazy muted loop playsinline preload="none"></video></div></div>
+      </article>
+      <article class="card dark reveal d2">
+        <div class="k" data-i="c6_k">Tapology · Sherdog</div>
+        <h3 data-i="c6_h">Your fight record, linked.</h3>
+        <p data-i="c6_p">Link your Tapology or Sherdog profile and your record sits right next to your training.</p>
+        <div class="tap">
+          <div class="tap-h"><span class="tap-logo">TAPOLOGY</span><span class="tap-ok" data-i="linked">Linked</span></div>
+          <div class="rec"><div><b>12</b><small data-i="w">Wins</small></div><div><b>3</b><small data-i="l">Losses</small></div><div><b>0</b><small data-i="d">Draws</small></div></div>
+          <div class="tap-row"><span>KO / TKO</span><i style="--w:58%"></i><b>7</b></div>
+          <div class="tap-row"><span data-i="subs">Submissions</span><i style="--w:33%"></i><b>4</b></div>
+          <div class="tap-row"><span data-i="decs">Decisions</span><i style="--w:9%"></i><b>1</b></div>
+          <div class="tap-link">tapology.com/fightcenter/fighters/…</div>
+        </div>
+      </article>
+      <article class="card reveal d2">
+        <div class="k" data-i="c10_k">Multilingual</div>
+        <h3 data-i="c10_h">Your language, covered.</h3>
+        <p data-i="c10_p">English and Spanish today. French, Portuguese and more on the way.</p>
+        <div class="big-num" style="font-size:clamp(56px,6vw,84px)">EN · ES</div>
+      </article>
+      <article class="card wide dark reveal" style="grid-column:1/-1">
+        <div class="wide-inner">
+          <div class="txt">
+            <div class="k" data-i="c9_k">Your dashboard</div>
+            <h3 data-i="c9_h">Your whole training life on one screen.</h3>
+            <p data-i="c9_p">Sessions, streak, Fuel, your weekly review and your next class. Clean, fast and out of your way.</p>
+          </div>
+          <div class="phone-crop"><div class="phone"><video data-app="home" data-lazy muted loop playsinline preload="none"></video></div></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WATCH -->
+<section class="sec" id="watch" style="background:var(--bg-2)">
+  <div class="wrap center">
+    <p class="eyebrow reveal" data-i="w_eye">See it in action</p>
+    <h2 class="h-l reveal d1" data-i="w_h">Watch OSS in a minute.</h2>
+    <div class="seg glass reveal d2" role="tablist">
+      <button role="tab" data-t="narrado" aria-selected="true" data-i="t1">Narrated tour</button>
+      <button role="tab" data-t="showcase" aria-selected="false" data-i="t2">Full showcase</button>
+      <button role="tab" data-t="promo" aria-selected="false" data-i="t3">Promo</button>
+      <button role="tab" data-t="mejoraste" aria-selected="false" data-i="t4">Are you better?</button>
+    </div>
+    <div class="theater reveal" id="thr">
+      <video id="thrVid" data-v="narrado" playsinline preload="none"></video>
+      <button class="play" id="thrPlay" aria-label="Play">
+        <span class="pb glass"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        <span class="cap"><span id="thrCap">Narrated tour</span><small id="thrDur">1:10</small></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section class="sec join" id="join">
+  <div class="wrap center">
+    <img class="lockup reveal" src="assets/img/lockup_dark.png" alt="OSS Fighter OS">
+    <h2 class="h-l reveal d1"><span data-i="j_a">Be first on</span> <span class="red" data-i="j_b">iPhone &amp; Android.</span></h2>
+    <p class="lede reveal d2" data-i="j_lede">Join the waitlist and get early access, free, the day OSS lands on the stores. No spam. One email when it's live.</p>
+    <form class="form glass reveal d3" id="wl" name="waitlist" method="POST" novalidate>
+      <div class="fields">
+                <input type="hidden" name="lang" id="wlLang" value="en">
+        <p hidden><label>Don't fill: <input name="bot-field"></label></p>
+        <div class="field">
+          <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@email.com" data-ph="ph_email" aria-label="Email">
+          <button class="btn btn-red" type="submit" data-i="j_btn">Get early access</button>
+        </div>
+        <div class="plat" role="radiogroup" aria-label="Platform">
+          <label><input type="radio" name="platform" value="iphone" checked><span>iPhone</span></label>
+          <label><input type="radio" name="platform" value="android"><span>Android</span></label>
+          <label><input type="radio" name="platform" value="both"><span data-i="both">Both</span></label>
+        </div>
+        <div class="err" id="wlErr" role="alert"></div>
+      </div>
+      <div class="ok" aria-live="polite">
+        <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h3 data-i="ok_h">You're on the list. Oss!</h3>
+        <p class="fine" style="font-size:15px" data-i="ok_p">We'll email you the day it's live. Until then, train with the web app.</p>
+      </div>
+    </form>
+    <div class="socials reveal"><a class="glass soc" href="https://www.instagram.com/oss.fighterapp/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@oss.fighterapp</a><a class="glass soc" href="https://www.tiktok.com/@oss.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.3 4.5 5 4.8"/></svg>@oss.app</a></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="h-m center reveal" data-i="faq_h">Questions</h2>
+    <div class="faq">
+      <details class="reveal"><summary data-i="q1">Is OSS free?</summary><p data-i="a1">Yes. Early users get OSS free. Later a few advanced extras will be premium, but logging your training will always be free.</p></details>
+      <details class="reveal"><summary data-i="q2">Do I need to be a pro fighter?</summary><p data-i="a2">No. OSS is for anyone who trains: white belts, hobbyists, amateurs, pros and coaches. If you train, it helps you see your progress.</p></details>
+      <details class="reveal"><summary data-i="q3">Does it teach me martial arts?</summary><p data-i="a3">No, and that's on purpose. Your coach teaches you. OSS logs what you train, tracks your rounds and shows you how you're improving.</p></details>
+      <details class="reveal"><summary data-i="q4">Which disciplines does it cover?</summary><p data-i="a4">MMA, BJJ, Muay Thai, Boxing, Kickboxing, Wrestling and grappling, with timer presets for each.</p></details>
+      <details class="reveal"><summary data-i="q5">When can I get it?</summary><p data-i="a5"></p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div style="display:flex;align-items:center;gap:14px"><img class="logo" src="assets/img/logo_white.png" alt="OSS"><span>© 2026 Nexxa Software</span></div>
+    <nav>
+      <a href="https://www.instagram.com/oss.fighterapp/" target="_blank" rel="noopener" class="soc"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+      <a href="https://www.tiktok.com/@oss.app" target="_blank" rel="noopener" class="soc"><svg viewBox="0 0 24 24"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.3 4.5 5 4.8"/></svg>TikTok</a>
+      <a href="privacidad.html" data-i="privacy">Privacy</a>
+      <a href="terminos.html" data-i="terms">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="dock glass" id="dock">
+  <a class="btn btn-red" href="#join" data-i="cta_join">Join the waitlist</a>
+  <a class="btn btn-ghost" href="#watch" data-i="dock_watch">Watch</a>
+</div>
+
+<script>
+(()=>{
+const T={
+en:{ch1_e:"01 · Train",ch1_h:"Everything you train.<br>Logged in seconds.",ch1_p:"Start a session, follow your plan and let the clock run. OSS keeps up with you.",ch1s0_h:"Start training in one tap.",ch1s0_p:"Today's focus, your plan for the day and your routines, right where you need them.",ch1s1_h:"Train live. Close it in 20 seconds.",ch1s1_p:"Add technique, drills, pads and sparring as you go. Then a quick debrief: what worked and where you got caught.",ch1s2_h:"Rounds with a real announcer.",ch1s2_p:"Presets for MMA, Boxing, Muay Thai, BJJ and Tabata. Red rounds, blue rest, and a voice calling every round.",ch1s3_h:"A metronome for your pace.",ch1s3_p:"Set your work rate for shadowboxing, pads, bag or rope, and stay on rhythm round after round.",ch1s4_h:"Every discipline you train.",ch1s4_p:"MMA, BJJ, Wrestling, Muay Thai, Boxing, Kickboxing, Judo, Strength, Cardio and more. Or add your own.",ch2_e:"02 · AI Coach & Fight Lab",ch2_h:"An AI coach<br>in your corner.",ch2_p:"It knows your sessions, your Fuel and your weight. And it can watch your rounds.",ch2s0_h:"Ask it anything.",ch2s0_p:"What to work on today, what to eat with what you have left, how your sparring went. Answers built on your numbers.",ch2s1_h:"Film a round. Get your score.",ch2s1_p:"Upload a round or record it right there. Pick the session type and what to focus on.",ch2s2_h:"Frame by frame.",ch2s2_p:"OSS breaks down your technique: offense, defense, footwork, cardio and power, scored 0-100.",ch2s3_h:"What you did well. What to fix.",ch2s3_p:"Your mistakes, the drills to fix them, and your coach ready to explain.",ch3_e:"03 · Scout your opponent",ch3_h:"Study them<br><span class=\"acc\">before they study you.</span>",ch3_p:"Got a fight coming up? Upload your opponent's footage and walk in with a plan.",ch3s0_h:"Upload their footage.",ch3s0_p:"Their sparring, fights or highlights. Add what you know: stance, style, record.",ch3s1_h:"OSS scouts them for you.",ch3s1_p:"Stance, attack patterns and the habits they repeat, read straight from the video.",ch3s2_h:"Their habits, exposed.",ch3s2_p:"What they do when they jab, where they drop their guard and what to watch out for.",ch3s2_c:"Threat level · 58",ch3s3_h:"Your game plan, round by round.",ch3s3_p:"How to win each round, with weaknesses, attack and defense broken down.",ch3s4_h:"Your week vs. them.",ch3s4_p:"A full week of training built to beat this opponent, saved to your Fight Camp.",ch4_e:"04 · Technique Vault",ch4_h:"You train for an hour.<br><span class=\"acc\">By the next class, it's gone.</span>",ch4_p:"Every fighter knows it. You drill a technique, it clicks, and two days later you can't remember the details. The Vault fixes that.",ch4s0_h:"Log it the moment you learn it.",ch4s0_p:"Name, category, notes and the key details, right after class, while it's still fresh.",ch4s1_h:"Record it or attach a video.",ch4s1_p:"Film yourself or paste a link from YouTube or Instagram, so you can replay it before every class.",ch4s2_h:"Review. Mastered. In progress.",ch4s2_p:"Know what's fading, what you already own and what you're still learning. All in one place, so you never forget a technique again.",cyc0:"Review",cyc1:"Mastered",cyc2:"In progress",ch4s3_h:"Fundamentals, step by step.",ch4s3_p:"Wraps, guard, strikes, defense and ground basics, plus 870+ exercises with muscles and form.",ch5_e:"05 · Sparring intelligence",ch5_h:"Log every round.<br>See what it says about you.",ch5_p:"Your sparring and rolls turn into numbers you can actually train with.",ch5s0_h:"Log sparring and rolls.",ch5s0_p:"Rounds, takedowns, strikes and submissions landed or received. In control, even or a tough round.",ch5s1_h:"Your sparring radar.",ch5s1_p:"Control, timing, takedowns, defense, submissions and cardio, against your last 45 days and your goal.",ch5s1_c:"Timing 78 · Takedowns 40",ch5s2_h:"Your fighter profile.",ch5s2_p:"Power, footwork, energy, guard and more, built from your last sparring sessions.",ch5s3_h:"Every partner, every bout.",ch5s3_p:"Your record against each training partner, plus your real fights.",ch5s4_h:"Your combat record.",ch5s4_p:"Wins, losses and draws, submission and takedown rates, and the techniques you need to review.",ch6_e:"06 · Submission map",ch6_h:"Where you finish.<br><span class=\"acc\">Where you get caught.</span>",ch6_p:"Every submission you land or tap to, mapped on one body.",ch6s0_h:"Both sides, one body.",ch6s0_p:"What you finish and what finishes you, side by side.",ch6s1_h:"What you finish.",ch6s1_p:"Your go-to attacks: neck, shoulders, elbows, knees and ankles.",ch6s1_c:"Neck · top zone",ch6s2_h:"Breakdown by zone.",ch6s2_p:"Your rate on each zone and your top submission there, so you know where your game really lives.",ch6s3_h:"Your Fight DNA.",ch6s3_p:"Offensive grappler? Pressure striker? OSS reads your style from your own data.",ch6s4_h:"Your strengths heatmap.",ch6s4_p:"Submissions, takedowns, striking and what you practice most, in one heatmap.",ch6s5_h:"Fight IQ.",ch6s5_p:"One score for how smart you fight: effective strikes, shots absorbed, damage avoided, timing and distance. Higher is smarter.",ch7_e:"07 · Fuel & Fight Camp",ch7_h:"Fight week,<br>handled.",ch7_p:"Nutrition, hydration, recovery and readiness, all tuned to your fight.",ch7s0_h:"Fight Camp mode.",ch7s0_p:"Turn it on and OSS switches to camp: countdown, weight cut per day and camp goals.",ch7s1_h:"Fuel for your weight class.",ch7s1_p:"Calories and macros set for your weight class and your cut.",ch7s2_h:"Hydration that keeps up.",ch7s2_p:"One tap per glass. Watch your water goal fill up through the day.",ch7s3_h:"Fight readiness.",ch7s3_p:"Consistency, sparring, mastery, hydration and load in one score, with today's call: push or recover.",ch7s3_c:"59% · Recover today",ch7s4_h:"Training load.",ch7s4_p:"See when you're in the optimal zone and when you're about to overtrain.",ch8_e:"08 · For coaches",ch8_h:"You teach?<br>OSS runs your class.",ch8_p:"Plan your classes, build your schedule and take attendance, all from your phone.",ch8s0_h:"Build your class plan.",ch8s0_p:"Warm-up, technique, drills, situational games, sparring and cool-down, block by block, with live progress during class.",ch8s1_h:"Take attendance in seconds.",ch8s1_p:"Every student, every class. See who shows up the most and who you haven't seen in a while.",ch8s2_h:"Your weekly schedule.",ch8s2_p:"All your classes by day and time, so your students always know what's next.",nav_train:"Train",nav_scout:"Scout",nav_camp:"Fight Camp",nav_stats:"Stats",nav_ai:"AI Coach",nav_features:"Features",nav_watch:"Watch",nav_screens:"Screens",nav_cta:"Join waitlist",tag:"Coming soon to iPhone & Android",
+h1a:"Log every round.",h1b:"See yourself improve.",
+hero_lede:"The training companion for fighters. OSS doesn't teach you to fight. It logs what you already train and shows you, in numbers, how you're getting better.",
+cta_join:"Join the waitlist",cta_watch:"▶ Watch the tour",dock_watch:"Watch",soon:"Coming soon",sound_on:"Sound on",sound_off:"Mute",scroll:"Scroll",
+q_eye:"The real question",q_a:"You've been training for years.",q_b:"Are you getting better?",
+q_lede:"Most fighters can't answer that. Every class, every round, every tap blurs into the next. OSS turns your training into something you can actually see.",
+mani:"Not a course. Not a coach replacement. A training log built for fighters: what worked, where you got caught, and what to drill next.",
+mani_red:["fighters:","worked,","caught,","next."],
+f_eye:"And there's more",f_a:"Built for the mats.",f_b:"Designed like it's 2026.",
+f_lede:"MMA, BJJ, Muay Thai, Boxing and more. Log in seconds, train live, analyze your rounds and scout your next opponent.",
+c1_k:"Onboarding",c1_h:"Set up in two minutes. Built around you.",c1_p:"Pick your disciplines, level, stance and style. OSS builds your program and shows you everything it can do on the way in.",
+c2_k:"Round timer",c2_h:"\u201cRound one… Fight!\u201d",c2_p:"Presets for MMA, Boxing, Muay Thai, BJJ and Tabata, with a real announcer calling every round.",hear:"Hear the announcer",
+c3_k:"Combat stats",c3_h:"Radar, submission map and Fight IQ.",c3_p:"See where you finish, where you get caught and how your striking really adds up.",
+c4_k:"Fight Camp",c4_h:"Fight coming up? The app goes into camp mode.",c4_p:"Countdown to your fight, weight cut per day and camp goals.",
+c5_k:"AI Coach",c5_h:"A coach that knows your numbers.",c5_p:"It reads your sessions, your Fuel and your weight. Ask it what to work on today.",
+c6_k:"Tapology · Sherdog",c6_h:"Your fight record, linked.",c6_p:"Link your Tapology or Sherdog profile and your record sits right next to your training.",linked:"Linked",w:"Wins",l:"Losses",d:"Draws",subs:"Submissions",decs:"Decisions",
+c7_k:"Technique Vault",c7_h:"Never forget a technique.",c7_p:"Search, save and review every technique, plus fundamentals step by step and 870+ exercises.",
+c8_k:"Wrapped",c8_h:"Your month on the mats, Wrapped.",c8_p:"Weekly, monthly and yearly recaps made to share.",
+c9_k:"Your dashboard",c9_h:"Your whole training life on one screen.",c9_p:"Sessions, streak, Fuel, your weekly review and your next class. Clean, fast and out of your way.",
+c10_k:"Multilingual",
+c11_k:"Live session",c11_h:"Train live. Close it in 20 seconds.",c11_p:"The clock runs while you add technique, drills, pads and sparring. Then a quick debrief: what worked, where you got caught.",
+c12_k:"Camera mitts",c12_h:"Your camera is your mitt holder.",c12_p:"Hit live targets, slip and score. Your skeleton is tracked in real time.",
+c13_k:"Fight Lab · AI video analysis",c13_h:"Upload a round. Get your score.",c13_p:"OSS breaks down your footage frame by frame: offense, defense, footwork and the mistakes you keep repeating, plus the drills to fix them.",
+c14_k:"Scout your opponent",c14_h:"Study them before they study you.",c14_p:"Upload your opponent's fight and get their habits, weapons and openings, with a game plan to beat them.",
+c15_k:"Fight readiness",c15_h:"Know if you're ready to fight.",c15_p:"Consistency, sparring, mastery, hydration and load in one score, with today's call: push or recover.",c10_h:"Your language, covered.",c10_p:"English and Spanish today. French, Portuguese and more on the way.",
+s_eye:"Inside the app",s_h:"Every screen, made to be used mid-session.",
+w_eye:"See it in action",w_h:"Watch OSS in a minute.",t1:"Narrated tour",t2:"Full showcase",t3:"Promo",t4:"Are you better?",
+j_a:"Be first on",j_b:"iPhone & Android.",j_lede:"Join the waitlist and get early access, free, the day OSS lands on the stores. No spam. One email when it's live.",
+ph_email:"you@email.com",j_btn:"Get early access",both:"Both",ok_h:"You're on the list. Oss!",ok_p:"We'll email you the day it's live. Oss.",
+j_fine:"Can't wait? The full web app is live and free to try right now.",
+err_mail:"Enter a valid email.",err_net:"Couldn't save that. Check your connection and try again.",
+faq_h:"Questions",q1:"Is OSS free?",a1:"Yes. Early users get OSS free. Later a few advanced extras will be premium, but logging your training will always be free.",
+q2:"Do I need to be a pro fighter?",a2:"No. OSS is for anyone who trains: white belts, hobbyists, amateurs, pros and coaches. If you train, it helps you see your progress.",
+q3:"Does it teach me martial arts?",a3:"No, and that's on purpose. Your coach teaches you. OSS logs what you train, tracks your rounds and shows you how you're improving.",
+q4:"Which disciplines does it cover?",a4:"MMA, BJJ, Muay Thai, Boxing, Kickboxing, Wrestling and grappling, with timer presets for each.",
+q5:"When can I get it?",a5:"Very soon. OSS is landing on the App Store and Google Play. Join the waitlist and you'll be the first to know.",
+privacy:"Privacy",terms:"Terms",
+marquee:["MMA","Brazilian Jiu-Jitsu","Muay Thai","Boxing","Kickboxing","Wrestling","AI video analysis","Camera mitts","Opponent scouting","Fight readiness","Round timer","AI Coach","Fight Camp","Tapology"],swipe:"Swipe to see more →",
+dur:{narrado:"1:10",showcase:"1:04",promo:"0:23",mejoraste:"0:42"}},
+es:{ch1_e:"01 · Entrena",ch1_h:"Todo lo que entrenas.<br>Registrado en segundos.",ch1_p:"Empieza una sesión, sigue tu plan y deja correr el reloj. OSS va a tu ritmo.",ch1s0_h:"Empieza a entrenar con un toque.",ch1s0_p:"Tu foco del día, tu plan y tus rutinas, justo donde los necesitas.",ch1s1_h:"Entrena en vivo. Ciérrala en 20 segundos.",ch1s1_p:"Agrega técnica, drills, manoplas y sparring sobre la marcha. Al final, un debrief rápido: qué funcionó y dónde te atraparon.",ch1s2_h:"Rounds con voz real de anunciador.",ch1s2_p:"Rápidos para MMA, Box, Muay Thai, BJJ y Tabata. Round en rojo, descanso en azul y una voz que canta cada round.",ch1s3_h:"Un metrónomo para tu ritmo.",ch1s3_p:"Marca tu ritmo para sombra, manoplas, costal o cuerda, y no lo pierdas round tras round.",ch1s4_h:"Todas las disciplinas que entrenas.",ch1s4_p:"MMA, BJJ, Lucha, Muay Thai, Box, Kickboxing, Judo, Fuerza, Cardio y más. O agrega la tuya.",ch2_e:"02 · Coach de IA y Fight Lab",ch2_h:"Un coach de IA<br>en tu esquina.",ch2_p:"Conoce tus sesiones, tu Fuel y tu peso. Y puede ver tus rounds.",ch2s0_h:"Pregúntale lo que sea.",ch2s0_p:"Qué trabajar hoy, qué comer con lo que te queda, cómo te fue en sparring. Respuestas con tus números.",ch2s1_h:"Graba un round. Recibe tu nota.",ch2s1_p:"Sube un round o grábalo ahí mismo. Elige el tipo de sesión y en qué enfocarte.",ch2s2_h:"Cuadro por cuadro.",ch2s2_p:"OSS analiza tu técnica: ofensiva, defensa, footwork, cardio y potencia, con nota de 0 a 100.",ch2s3_h:"Lo que hiciste bien. Lo que debes corregir.",ch2s3_p:"Tus errores, los drills para corregirlos y tu coach listo para explicarte.",ch3_e:"03 · Estudia a tu rival",ch3_h:"Estúdialo<br><span class=\"acc\">antes de que te estudie.</span>",ch3_p:"¿Tienes pelea? Sube el video de tu rival y llega con un plan.",ch3s0_h:"Sube su video.",ch3s0_p:"Su sparring, peleas o highlights. Agrega lo que sabes: guardia, estilo, récord.",ch3s1_h:"OSS lo estudia por ti.",ch3s1_p:"Guardia, patrones de ataque y los hábitos que repite, leídos directo del video.",ch3s2_h:"Sus hábitos, al descubierto.",ch3s2_p:"Qué hace cuando lanza el jab, dónde baja la guardia y de qué cuidarte.",ch3s2_c:"Nivel de amenaza · 58",ch3s3_h:"Tu plan de pelea, round por round.",ch3s3_p:"Cómo ganar cada round, con debilidades, ataque y defensa desglosados.",ch3s4_h:"Tu semana contra él.",ch3s4_p:"Una semana completa de entreno hecha para ganarle, guardada en tu Fight Camp.",ch4_e:"04 · Vault de técnicas",ch4_h:"Entrenas una hora.<br><span class=\"acc\">Para la siguiente clase, ya se te olvidó.</span>",ch4_p:"Todo peleador lo vive. Practicas una técnica, te sale, y dos días después ya no recuerdas los detalles. La Vault lo resuelve.",ch4s0_h:"Anótala en cuanto la aprendas.",ch4s0_p:"Nombre, categoría, notas y los detalles clave, al terminar la clase, mientras sigue fresca.",ch4s1_h:"Grábala o adjunta un video.",ch4s1_p:"Grábate o pega un link de YouTube o Instagram, para repetirla antes de cada clase.",ch4s2_h:"Repasar. Dominadas. En proceso.",ch4s2_p:"Sabe qué se te está olvidando, qué ya dominas y qué sigues aprendiendo. Todo en un solo lugar, para que nunca se te vuelva a olvidar una técnica.",cyc0:"Repasar",cyc1:"Dominadas",cyc2:"En proceso",ch4s3_h:"Fundamentos paso a paso.",ch4s3_p:"Vendaje, guardia, golpes, defensa y piso, más de 870 ejercicios con músculos y técnica.",ch5_e:"05 · Inteligencia de sparring",ch5_h:"Registra cada round.<br>Mira lo que dice de ti.",ch5_p:"Tu sparring y tus rolls se vuelven números con los que sí puedes entrenar.",ch5s0_h:"Registra sparring y rolls.",ch5s0_p:"Rounds, derribos, golpes y sumisiones aplicadas o recibidas. En control, parejo o round difícil.",ch5s1_h:"Tu radar de sparring.",ch5s1_p:"Control, timing, derribos, defensa, sumisiones y cardio, contra tus últimos 45 días y tu meta.",ch5s1_c:"Timing 78 · Derribos 40",ch5s2_h:"Tu perfil de peleador.",ch5s2_p:"Potencia, footwork, energía, guardia y más, a partir de tus últimos sparrings.",ch5s3_h:"Cada compañero, cada round.",ch5s3_p:"Tu récord contra cada compañero de entreno, más tus peleas reales.",ch5s4_h:"Tu récord de combate.",ch5s4_p:"Victorias, derrotas y empates, porcentaje de sumisiones y derribos, y las técnicas que debes repasar.",ch6_e:"06 · Mapa de sumisiones",ch6_h:"Dónde finalizas.<br><span class=\"acc\">Dónde te atrapan.</span>",ch6_p:"Cada sumisión que aplicas o que te aplican, en un solo cuerpo.",ch6s0_h:"Los dos lados, un solo cuerpo.",ch6s0_p:"Lo que tú finalizas y lo que te finaliza, lado a lado.",ch6s1_h:"Lo que tú finalizas.",ch6s1_p:"Tus ataques de cabecera: cuello, hombros, codos, rodillas y tobillos.",ch6s1_c:"Cuello · tu zona top",ch6s2_h:"Desglose por zona.",ch6s2_p:"Tu porcentaje en cada zona y tu mejor sumisión ahí, para saber dónde vive tu juego.",ch6s3_h:"Tu ADN de pelea.",ch6s3_p:"¿Grappler ofensivo? ¿Striker de presión? OSS lee tu estilo con tus propios datos.",ch6s4_h:"Tu mapa de fortalezas.",ch6s4_p:"Sumisiones, derribos, striking y lo que más practicas, en un solo mapa.",ch6s5_h:"Fight IQ.",ch6s5_p:"Un solo puntaje de qué tan inteligente peleas: golpes efectivos, golpes recibidos, daño evitado, timing y distancia. Más alto, más inteligente.",ch7_e:"07 · Fuel y Fight Camp",ch7_h:"La semana de pelea,<br>bajo control.",ch7_p:"Nutrición, hidratación, recuperación y preparación, todo ajustado a tu pelea.",ch7s0_h:"Modo Fight Camp.",ch7s0_p:"Actívalo y OSS entra en modo campamento: cuenta regresiva, corte de peso por día y metas.",ch7s1_h:"Fuel para tu categoría.",ch7s1_p:"Calorías y macros según tu categoría y tu corte de peso.",ch7s2_h:"Hidratación al día.",ch7s2_p:"Un toque por vaso. Mira cómo se llena tu meta de agua durante el día.",ch7s3_h:"Fight readiness.",ch7s3_p:"Constancia, sparring, dominio, hidratación y carga en un solo puntaje, con la decisión del día: empujar o recuperar.",ch7s3_c:"59% · Hoy recupera",ch7s4_h:"Carga de entrenamiento.",ch7s4_p:"Ve cuándo estás en la zona óptima y cuándo estás por sobreentrenar.",ch8_e:"08 · Para profes",ch8_h:"¿Das clases?<br>OSS organiza tu clase.",ch8_p:"Planea tus clases, arma tu horario y pasa lista, todo desde tu celular.",ch8s0_h:"Arma tu plan de clase.",ch8s0_p:"Calentamiento, técnica, drills, juego situacional, sparring y vuelta a la calma, bloque por bloque y con el avance en vivo.",ch8s1_h:"Pasa lista en segundos.",ch8s1_p:"Cada alumno, cada clase. Ve quién viene más y a quién no has visto en un rato.",ch8s2_h:"Tu horario de la semana.",ch8s2_p:"Todas tus clases por día y hora, para que tus alumnos sepan qué sigue.",nav_train:"Entrena",nav_scout:"Rival",nav_camp:"Fight Camp",nav_stats:"Stats",nav_ai:"Coach IA",nav_features:"Funciones",nav_watch:"Video",nav_screens:"Pantallas",nav_cta:"Lista de espera",tag:"Muy pronto en iPhone y Android",
+h1a:"Registra cada round.",h1b:"Mira cómo mejoras.",
+hero_lede:"El compañero de entrenamiento para peleadores. OSS no te enseña a pelear: registra lo que ya entrenas y te muestra, en números, cómo vas mejorando.",
+cta_join:"Únete a la lista",cta_watch:"▶ Ver el recorrido",dock_watch:"Ver video",soon:"Muy pronto",sound_on:"Con sonido",sound_off:"Silenciar",scroll:"Desliza",
+q_eye:"La verdadera pregunta",q_a:"Llevas años entrenando.",q_b:"¿De verdad estás mejorando?",
+q_lede:"Casi ningún peleador lo sabe. Cada clase, cada round, cada tap se mezcla con el siguiente. OSS convierte tu entrenamiento en algo que por fin puedes ver.",
+mani:"No es un curso. No reemplaza a tu coach. Es un registro hecho para peleadores: qué funcionó, dónde te atraparon y qué trabajar después.",
+mani_red:["peleadores:","funcionó,","atraparon","después."],
+f_eye:"Y hay más",f_a:"Hecho para el tatami.",f_b:"Diseñado como en 2026.",
+f_lede:"MMA, BJJ, Muay Thai, Box y más. Registra en segundos, entrena en vivo, analiza tus rounds y estudia a tu próximo rival.",
+c1_k:"Onboarding",c1_h:"Lista en dos minutos. Hecha a tu medida.",c1_p:"Eliges tus disciplinas, nivel, guardia y estilo. OSS arma tu programa y de paso te enseña todo lo que puede hacer.",
+c2_k:"Timer de rounds",c2_h:"\u201cRound uno… ¡Pelea!\u201d",c2_p:"Rápidos para MMA, Box, Muay Thai, BJJ y Tabata, con voz real de anunciador cantando cada round.",hear:"Escucha al anunciador",
+c3_k:"Stats de combate",c3_h:"Radar, mapa de sumisiones y Fight IQ.",c3_p:"Mira dónde finalizas, dónde te atrapan y cuánto suma de verdad tu striking.",
+c4_k:"Fight Camp",c4_h:"¿Tienes pelea? La app entra en modo campamento.",c4_p:"Cuenta regresiva para tu pelea, corte de peso por día y metas del campamento.",
+c5_k:"Coach de IA",c5_h:"Un coach que conoce tus números.",c5_p:"Lee tus sesiones, tu Fuel y tu peso. Pregúntale qué trabajar hoy.",
+c6_k:"Tapology · Sherdog",c6_h:"Tu récord de peleas, conectado.",c6_p:"Vincula tu perfil de Tapology o Sherdog y tu récord vive junto a tu entrenamiento.",linked:"Vinculado",w:"Victorias",l:"Derrotas",d:"Empates",subs:"Sumisiones",decs:"Decisiones",
+c7_k:"Vault de técnicas",c7_h:"Nunca olvides una técnica.",c7_p:"Busca, guarda y repasa cada técnica, más fundamentos paso a paso y más de 870 ejercicios.",
+c8_k:"Wrapped",c8_h:"Tu mes en el tatami, en un Wrapped.",c8_p:"Resúmenes semanales, mensuales y anuales hechos para compartir.",
+c9_k:"Tu inicio",c9_h:"Todo tu entrenamiento en una pantalla.",c9_p:"Sesiones, racha, Fuel, tu resumen semanal y tu próxima clase. Limpia, rápida y sin estorbar.",
+c10_k:"Multilingüe",
+c11_k:"Sesión en vivo",c11_h:"Entrena en vivo. Ciérrala en 20 segundos.",c11_p:"El reloj corre mientras agregas técnica, drills, manoplas y sparring. Al final, un debrief rápido: qué funcionó y dónde te atraparon.",
+c12_k:"Manoplas con cámara",c12_h:"Tu cámara es tu manoplero.",c12_p:"Golpea objetivos en vivo, esquiva y suma puntos. Tu esqueleto se detecta en tiempo real.",
+c13_k:"Fight Lab · Análisis con IA",c13_h:"Sube un round. Recibe tu nota.",c13_p:"OSS analiza tu video cuadro por cuadro: ofensiva, defensa, footwork y los errores que repites, con los drills para corregirlos.",
+c14_k:"Estudia a tu rival",c14_h:"Estúdialo antes de que te estudie.",c14_p:"Sube la pelea de tu rival y recibe sus hábitos, armas y huecos, con un plan para ganarle.",
+c15_k:"Fight readiness",c15_h:"Sabe si estás listo para pelear.",c15_p:"Constancia, sparring, dominio, hidratación y carga en un solo puntaje, con la decisión del día: empujar o recuperar.",c10_h:"Hablas tu idioma.",c10_p:"Inglés y español hoy. Francés, portugués y más muy pronto.",
+s_eye:"Dentro de la app",s_h:"Cada pantalla, hecha para usarse a mitad de la clase.",
+w_eye:"Mírala en acción",w_h:"OSS en un minuto.",t1:"Recorrido narrado",t2:"Showcase completo",t3:"Promo",t4:"¿Mejoraste?",
+j_a:"Sé el primero en",j_b:"iPhone y Android.",j_lede:"Únete a la lista y ten acceso anticipado, gratis, el día que OSS llegue a las tiendas. Sin spam. Un solo correo cuando salga.",
+ph_email:"tu@correo.com",j_btn:"Quiero acceso",both:"Ambos",ok_h:"Ya estás en la lista. ¡Oss!",ok_p:"Te escribimos el día que salga. Oss.",
+j_fine:"¿No quieres esperar? La web app completa ya está en línea y es gratis.",
+err_mail:"Escribe un correo válido.",err_net:"No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.",
+faq_h:"Preguntas",q1:"¿OSS es gratis?",a1:"Sí. Los primeros usuarios tienen OSS gratis. Más adelante algunos extras avanzados serán premium, pero registrar tu entrenamiento siempre será gratis.",
+q2:"¿Tengo que ser peleador profesional?",a2:"No. OSS es para cualquiera que entrene: cintas blancas, aficionados, amateurs, profesionales y profes. Si entrenas, te ayuda a ver tu progreso.",
+q3:"¿Me enseña artes marciales?",a3:"No, y es a propósito. Tu coach te enseña. OSS registra lo que entrenas, cuenta tus rounds y te muestra cómo vas mejorando.",
+q4:"¿Qué disciplinas cubre?",a4:"MMA, BJJ, Muay Thai, Box, Kickboxing, Lucha y grappling, con presets de timer para cada una.",
+q5:"¿Cuándo la puedo tener?",a5:"Muy pronto. OSS llega a App Store y Google Play. Únete a la lista y serás de los primeros en saberlo.",
+privacy:"Privacidad",terms:"Términos",
+marquee:["MMA","Jiu-Jitsu Brasileño","Muay Thai","Box","Kickboxing","Lucha","Análisis de video con IA","Manoplas con cámara","Estudia a tu rival","Fight readiness","Timer de rounds","Coach de IA","Fight Camp","Tapology"],swipe:"Desliza para ver más →",
+dur:{narrado:"1:07",showcase:"1:04",promo:"0:24",mejoraste:"0:40"}}
+};
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const mqMobile=matchMedia("(max-width:760px)");
+let lang=store.get("oss_lang")||((navigator.language||"en").toLowerCase().startsWith("es")?"es":"en");
+
+/* video source picker: lang + orientation */
+function srcFor(v,o){o=o||(mqMobile.matches?"916":"169");return `assets/v/${v}_${lang}_${o}`}
+function setSrc(vid,force){
+  const v=vid.dataset.v, app=vid.dataset.app; if(!v&&!app) return;
+  const base=app?`assets/app/${app}_${lang}`:srcFor(v,vid.dataset.o);
+  if(vid.dataset.cur===base && !force) return;
+  const wasPlaying=!vid.paused, t=vid.currentTime;
+  vid.dataset.cur=base; vid.poster=base+".jpg";
+  if(vid.hasAttribute("data-lazy") && !vid.dataset.loaded) return;
+  vid.src=base+".mp4";
+  if(wasPlaying){vid.play().catch(()=>{})}
+}
+
+/* i18n */
+function applyLang(){
+  document.documentElement.lang=lang;
+  const d=T[lang];
+  $$("[data-i]").forEach(el=>{const k=el.dataset.i; if(d[k]!=null && typeof d[k]=="string") el.textContent=d[k]});
+  $$("[data-ph]").forEach(el=>el.placeholder=d[el.dataset.ph]);
+  $$("[data-ih]").forEach(el=>{const k=el.dataset.ih;if(d[k]!=null)el.innerHTML=d[k]});
+  $$(".chap.ld img[data-cap]").forEach(im=>im.src=`assets/cap/${im.dataset.cap}_${lang}.webp`);
+  buildStrip();
+  $$(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  $("#wlLang").value=lang;
+  $("#mq").innerHTML=[...d.marquee,...d.marquee].map(w=>`<span>${w}</span>`).join("");
+  $("#gal").innerHTML=Array.from({length:10},(_,i)=>`<img loading="lazy" src="assets/img/shot_${lang}_${String(i+1).padStart(2,"0")}.webp" alt="OSS screen ${i+1}" draggable="false">`).join("");
+  buildManifesto();
+  $$("video[data-v],video[data-app]").forEach(v=>setSrc(v));
+  syncTheaterCap();
+  $$("[data-sound]").forEach(b=>soundLabel(b));
+}
+$$(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;store.set("oss_lang",lang);applyLang()}));
+mqMobile.addEventListener("change",()=>$$("video[data-v]").forEach(v=>setSrc(v)));
+
+/* sound toggles */
+function soundLabel(b){const host=document.getElementById(b.dataset.sound);const v=host.tagName==="VIDEO"?host:$("video",host);
+  const s=b.querySelector("span"); s.textContent=v.muted?T[lang].sound_on:T[lang].sound_off; b.classList.toggle("on",!v.muted)}
+$$("[data-sound]").forEach(b=>b.addEventListener("click",()=>{const host=document.getElementById(b.dataset.sound);const v=host.tagName==="VIDEO"?host:$("video",host);
+  const unmuting=v.muted;
+  if(unmuting){$$("video").forEach(o=>{if(o!==v){o.muted=true}});$$("[data-sound]").forEach(soundLabel)}
+  v.muted=!v.muted; if(unmuting){v.currentTime=0;v.play().catch(()=>{})} soundLabel(b)}));
+
+/* mobile menu */
+const burger=$("#burger"),mm=$("#mmenu");
+const setMenu=o=>{document.body.classList.toggle("menu-open",o);burger.setAttribute("aria-expanded",o);mm.setAttribute("aria-hidden",!o);
+  $$(".mm-panel>a",mm).forEach((a,i)=>a.style.transitionDelay=o?(60+i*35)+"ms":"0ms")};
+burger.addEventListener("click",()=>setMenu(!document.body.classList.contains("menu-open")));
+mm.addEventListener("click",e=>{if(e.target===mm||e.target.closest("a"))setMenu(false)});
+addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false)});
+mqMobile.addEventListener("change",()=>setMenu(false));
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});
+$$(".reveal,.cinema").forEach(el=>io.observe(el));
+
+/* lazy videos: load + play in view, pause out of view */
+const vio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;
+  if(e.isIntersecting){ if(!v.dataset.loaded){v.dataset.loaded=1; v.dataset.cur="";setSrc(v,true)}
+    v.play().catch(()=>{}) }
+  else if(!v.paused) v.pause()
+}),{threshold:.35});
+$$("video[data-lazy]").forEach(v=>vio.observe(v));
+/* hero pauses off-screen too */
+const hio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;e.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.2});
+hio.observe($("#heroVid"));
+
+/* manifesto word reveal on scroll */
+let words=[];
+function buildManifesto(){const p=$("#mani"),reds=T[lang].mani_red;
+  p.innerHTML=T[lang].mani.split(" ").map(w=>`<span class="w${reds.includes(w)?" r":""}">${w}</span>`).join(" ");
+  words=$$(".w",p);paint()}
+function paint(){if(!words.length)return;const r=$("#mani").getBoundingClientRect(),vh=innerHeight;
+  const p=Math.min(1,Math.max(0,(vh*.85-r.top)/(r.height+vh*.35)));const n=Math.round(p*words.length);
+  words.forEach((w,i)=>w.classList.toggle("on",i<n))}
+
+/* nav + dock on scroll */
+const nav=$("#nav"),dock=$("#dock"),join=$("#join");
+function onScroll(){paint();syncChaps();const y=scrollY;
+  nav.style.background=y>40?"linear-gradient(180deg,rgba(20,20,22,.72),rgba(20,20,22,.55))":"";
+  const jr=join.getBoundingClientRect();dock.classList.toggle("show",y>innerHeight*.8 && !(jr.top<innerHeight && jr.bottom>0))}
+addEventListener("scroll",onScroll,{passive:true});
+
+/* announcer voice */
+let ann=null;
+$$("[data-hear]").forEach(hear=>hear.addEventListener("click",()=>{if(ann&&!ann.paused){ann.pause();return}
+  $$("video").forEach(o=>o.muted=true);$$("[data-sound]").forEach(soundLabel);
+  ann=new Audio(`assets/a/announcer_${lang}.mp3`);hear.classList.add("playing");
+  ann.addEventListener("ended",()=>hear.classList.remove("playing"));ann.addEventListener("pause",()=>hear.classList.remove("playing"));ann.play().catch(()=>hear.classList.remove("playing"))}));
+
+/* gallery drag + arrows */
+const gal=$("#gal");let dn=false,sx=0,sl=0;
+gal.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;dn=true;sx=e.clientX;sl=gal.scrollLeft;gal.style.scrollSnapType="none"});
+addEventListener("pointerup",()=>{if(dn){dn=false;gal.style.scrollSnapType=""}});
+gal.addEventListener("pointermove",e=>{if(dn)gal.scrollLeft=sl-(e.clientX-sx)});
+$$("[data-g]").forEach(b=>b.addEventListener("click",()=>gal.scrollBy({left:(+b.dataset.g)*gal.clientWidth*.6,behavior:"smooth"})));
+
+/* theater */
+const tv=$("#thrVid"),tp=$("#thrPlay");
+function syncTheaterCap(){const t=$(".seg [aria-selected=true]");$("#thrCap").textContent=t.textContent;$("#thrDur").textContent=T[lang].dur[t.dataset.t]}
+$$(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  $$(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  tv.pause();tv.dataset.v=b.dataset.t;tv.dataset.cur="";tv.removeAttribute("src");setSrc(tv,true);tv.load();
+  tv.removeAttribute("controls");tp.classList.remove("hide");syncTheaterCap()}));
+tp.addEventListener("click",()=>{$$("video").forEach(o=>{if(o!==tv){o.muted=true}});$$("[data-sound]").forEach(soundLabel);
+  if(!tv.getAttribute("src")){tv.src=tv.dataset.cur+".mp4"}tv.muted=false;tv.controls=true;tv.play().catch(()=>{});tp.classList.add("hide")});
+tv.addEventListener("ended",()=>{tv.removeAttribute("controls");tp.classList.remove("hide")});
+tv.addEventListener("play",()=>{$("#heroVid").pause()});
+
+/* waitlist → Netlify Forms */
+const f=$("#wl"),err=$("#wlErr");
+f.addEventListener("submit",async e=>{e.preventDefault();err.textContent="";
+  const email=f.email.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){err.textContent=T[lang].err_mail;f.email.focus();return}
+  const btn=$("button[type=submit]",f);btn.disabled=true;btn.style.opacity=.6;
+  try{
+    const fd=new FormData(f);
+    const r=await fetch("https://qfhutuezzewfgjwxbtth.supabase.co/functions/v1/waitlist",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({app:"oss",email,platform:fd.get("platform"),lang,source:location.hostname,website:fd.get("bot-field")||""})});
+    if(!r.ok) throw new Error(r.status);
+    f.classList.add("done");
+  }catch(x){err.textContent=T[lang].err_net}
+  finally{btn.disabled=false;btn.style.opacity=""}
+});
+
+/* ---------- chapters ---------- */
+const STRIP={en:[["RNC","Submissions",43,"#8B5CF6",""],["Armbar","Submissions",40,"#8B5CF6","ip"],["Triangle","Submissions",100,"#8B5CF6","ms"],["Kimura","Submissions",100,"#8B5CF6","ms"],["Guillotine","Submissions",100,"#8B5CF6","ms"],["D'Arce","Submissions",100,"#8B5CF6",""],["Heel Hook","Submissions",100,"#8B5CF6",""],["Upa","Defense",70,"#14B8A6","rv"],["Jab-Cross-Hook","Striking",35,"#EF4444","rv"],["Knee Cut Pass","Grappling",100,"#3B82F6","ms"],["Back Take","Grappling",40,"#3B82F6","ip"],["Double Leg","Takedowns",28,"#F59E0B","ip"],["Sprawl","Takedown def.",65,"#14B8A6",""],["Omoplata","Submissions",100,"#8B5CF6","ms"]],
+ st:{en:{rv:"REVIEW",ms:"MASTERED",ip:"IN PROGRESS"},es:{rv:"REPASAR",ms:"DOMINADA",ip:"EN PROCESO"}},cat:{"Submissions":"Sumisiones","Defense":"Defensa","Grappling":"Grappling","Takedowns":"Derribos","Takedown def.":"Def. de derribo","Striking":"Striking"}};
+function buildStrip(){const el=$(".tech-strip");if(!el)return;const row=STRIP.en.map(([n,c,w,col,st])=>`<div class="tchip">${st?`<span class="st ${st}">${STRIP.st[lang][st]}</span>`:'<span class="st">'+w+'%</span>'}<b>${n}</b><small>${lang==="es"?STRIP.cat[c]:c}</small><i style="--w:${w}%;--c:${col}"></i></div>`).join("");el.innerHTML=`<div class="tt">${row}${row}</div>`}
+const chaps=$$(".chap");
+const loadChap=ch=>{if(ch.classList.contains("ld"))return;ch.classList.add("ld");$$("img[data-cap]",ch).forEach(im=>im.src=`assets/cap/${im.dataset.cap}_${lang}.webp`)};
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){loadChap(e.target)}}),{rootMargin:"900px 0px"});
+chaps.forEach(c=>cio.observe(c));
+function iqAnim(card,on){const fg=$(".iq-fg",card),n=$(".iq-n",card);if(!fg)return;const to=+n.dataset.to,C=367.6;
+  if(on){fg.style.strokeDasharray=`${C*to/100} 490`;let t0=null;const f=t=>{t0=t0||t;const k=Math.min(1,(t-t0)/1500),e=1-Math.pow(1-k,3);n.textContent=Math.round(to*e);if(k<1&&card.dataset.on==="1")requestAnimationFrame(f)};card.dataset.on="1";requestAnimationFrame(f)}
+  else{card.dataset.on="0";fg.style.strokeDasharray="0 490";n.textContent="0"}}
+function activate(ch,i){const steps=$$(".step",ch),media=$$(".phone .m",ch);if(ch._i===i)return;ch._i=i;
+  steps.forEach((s,k)=>s.classList.toggle("on",k===i));
+  media.forEach((m,k)=>{const on=k===i;m.classList.toggle("on",on);
+    if(m.tagName==="VIDEO"){if(on){if(!m.dataset.loaded){m.dataset.loaded=1;m.dataset.cur="";setSrc(m,true);if(m.dataset.start)m.addEventListener("ended",()=>{m.currentTime=+m.dataset.start;m.play().catch(()=>{})})}const st=+(m.dataset.start||0);if(m.readyState>0){try{m.currentTime=st}catch(e){}}else if(st){m.addEventListener("loadedmetadata",()=>{try{m.currentTime=st}catch(e){}},{once:true})}m.play().catch(()=>{})}else m.pause()}
+    if(m.classList.contains("iq"))iqAnim(m,on)});
+  const r=$(".rail i",ch);if(r)r.style.setProperty("--prog",((i+1)/steps.length*100)+"%")}
+/* scroll-position based (works the same scrolling down or up) */
+function syncChaps(){const vh=innerHeight,line=vh*(mqMobile.matches?.62:.52);
+  chaps.forEach(ch=>{const r=ch.getBoundingClientRect();if(r.bottom<-vh||r.top>vh*2)return;
+    const steps=$$(".step",ch);let i=0;steps.forEach((st,k)=>{if(st.getBoundingClientRect().top<line)i=k});activate(ch,i)})}
+chaps.forEach(ch=>activate(ch,0));
+/* auto-cycling media (Vault: review / mastered / in progress) */
+setInterval(()=>{$$(".m.cyc.on").forEach(m=>{const ims=$$("img",m);let k=ims.findIndex(x=>x.classList.contains("on"));k=(k+1)%ims.length;
+  ims.forEach((x,j)=>x.classList.toggle("on",j===k));const tabs=$$(".step.on .cyc-tabs span",m.closest(".chap"));tabs.forEach((t,j)=>t.classList.toggle("on",j===k))})},2200);
+/* chapter videos must not be grabbed by the generic lazy observer */
+applyLang();onScroll();addEventListener("resize",syncChaps);
+})();
+</script>
+</body>
+</html>
