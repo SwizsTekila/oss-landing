@@ -965,6 +965,13 @@ function buildHero(){
   r.addEventListener("pointermove",e=>{ev=e;if(!raf)raf=requestAnimationFrame(go)});
   r.addEventListener("pointerleave",()=>{r.classList.remove("tilt");r.style.transition="";r.style.transform=""});
 })();
+(()=>{const bell=new Audio("assets/a/bell.mp3");bell.preload="auto";bell.volume=.55;let done=false;
+  const evs=["pointerdown","keydown","touchstart"];
+  const off=()=>evs.forEach(e=>removeEventListener(e,arm,true));
+  const ring=()=>{if(done)return;done=true;off();bell.currentTime=0;bell.play().catch(()=>{})};
+  function arm(e){if(e.target.closest&&e.target.closest("[data-sound],[data-hear]")){done=true;off();return}ring()}
+  bell.play().then(()=>{done=true}).catch(()=>evs.forEach(e=>addEventListener(e,arm,{capture:true,passive:true})));
+})();
 applyLang();onScroll();addEventListener("resize",syncChaps);
 })();
 </script>
