@@ -840,7 +840,7 @@ function applyLang(){
   $$(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
   $("#wlLang").value=lang;
   $("#mq").innerHTML=[...d.marquee,...d.marquee].map(w=>`<span>${w}</span>`).join("");
-  $("#gal").innerHTML=Array.from({length:10},(_,i)=>`<img loading="lazy" src="assets/img/shot_${lang}_${String(i+1).padStart(2,"0")}.webp" alt="OSS screen ${i+1}" draggable="false">`).join("");
+  $("#gal").innerHTML=Array.from({length:13},(_,i)=>`<img loading="lazy" src="assets/img/shot_${lang}_${String(i+1).padStart(2,"0")}.webp" alt="OSS screen ${i+1}" draggable="false">`).join("");
   buildManifesto();
   buildHero();
   dispatchEvent(new Event("osslang"));
